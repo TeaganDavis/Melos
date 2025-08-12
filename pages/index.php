@@ -21,18 +21,34 @@
         listens and/or suggested music -->
         <h2>Your Recently Played</h2>
         <div id="recent-playlists">
-            <?php for ($x = 1; $x <= 8; $x+=1) {
-                echo "<a href='#playlist-id". $x . "' class='playlist-links'>
-                    <div class='playlists' id='playist-id" . $x . "'>
-                    <!--<img src='../data/musical-note.png' width=20%>-->
-                    <div class='playlist-details'>
-                        <h3>Playlist Name " . $x . "</h3>
-                        <!-- Song Count -->
-                        <h4>## songs</h4>
-                        <!-- Playlist play length -->
-                        <h4># hr. ## min.</h4> 
-                    </div> </a>
-                </div>";}
+            <?php 
+                $DBConnection = new mysqli("localhost", "root", "", "melos");
+                
+                $UserPlaylists = $DBConnection->query("SELECT * FROM playlists WHERE user_id = ". $_SESSION['user_id']);
+
+                $_SESSION['playlists'] = [];
+
+                if ($UserPlaylists && $UserPlaylists->num_rows > 0){
+                    while ($Row = $UserPlaylists->fetch_assoc()) {
+                        $_SESSION['playlists'][] = [
+                            "playlist_id" => $Row['playlist_id'],
+                            "user_id" => $Row['user_id'],
+                            "playlist_name" => $Row['playlist_name'],
+                            "playlist_desc" => $Row['playlist_desc'],
+                            "privacy" => $Row['privacy']
+                        ];
+
+                        echo "<a class='playlist-links'>
+                            <div class='playlists' id='". $Row['playlist_id'] ."'>";
+                        echo "<h3>" . htmlspecialchars($Row['playlist_name']) . "</h3>";
+                        echo "<p>" . htmlspecialchars($Row['playlist_desc']) . "</p>";
+                        echo "<p><strong>Privacy:</strong> " . htmlspecialchars($Row['privacy']) . "</p>";
+                        echo "</div>
+                            </a>";
+                    }
+                } else {
+                    echo "<p>You don't have any playlists yet.</p>";
+                }
             ?>
         </div>
     </div>

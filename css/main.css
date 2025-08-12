@@ -44,16 +44,15 @@ nav a:hover {
     flex-wrap: wrap;
     justify-content: center;
 }
+.playlist-links{
+    
+}
 .playlists {
     width: 250px;
     background-color: rgb(52, 52, 52, 0.66);
     border-radius: 15px;
     margin: 20px;
-}
-.playlist-links {
-    h4 {
-        color: white;
-    }
+    padding: 30px;
 }
 
 #footer {

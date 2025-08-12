@@ -77,11 +77,23 @@
                                 "privacy" => $Row['privacy']
                             ];
 
-                            echo "<div class='recent-playlist'><a>";
-                            echo "<h3>" . htmlspecialchars($Row['playlist_name']) . "</h3>";
-                            echo "<p>" . htmlspecialchars($Row['playlist_desc']) . "</p>";
-                            echo "<p><strong>Privacy:</strong> " . htmlspecialchars($Row['privacy']) . "</p>";
-                            echo "</a></div>";
+                            echo "<form method='post' action='../pages/playlist-page.php'>
+                                <div class'recent-playlist'>
+                                    <input type='hidden' name='form_id' value='playlist_form'/>
+                                    <input type='hidden' name='playlist_id' value='". htmlspecialchars($Row['playlist_id']) ."'/>
+                                    <label font-size='20'>" . htmlspecialchars($Row['playlist_name']) . "</label>
+                                    <label>". htmlspecialchars($Row['playlist_desc']) ."</label>
+                                    <label>". htmlspecialchars($Row['privacy']) ."</label>
+                                    <button type='submit'>Open</button>
+                                </div>
+                            </form>";
+
+                            // echo "<div class='recent-playlist'><a href='../pages/playlist.php'>";
+                            // echo "<input type='hidden' value='". htmlspecialchars($Row['playlist_id']) ."'/>";
+                            // echo "<h3>" . htmlspecialchars($Row['playlist_name']) . "</h3>";
+                            // echo "<p>" . htmlspecialchars($Row['playlist_desc']) . "</p>";
+                            // echo "<p><strong>Privacy:</strong> " . htmlspecialchars($Row['privacy']) . "</p>";
+                            // echo "</a></div>";
                         }
                     } else {
                         echo "<p>You don't have any playlists yet.</p>";

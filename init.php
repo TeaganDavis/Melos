@@ -61,5 +61,8 @@
     if(!isset($_SESSION['playlists'])){
         $_SESSION['playlists'] = [];
     }
+    if(!isset($_SESSION['selectedPlaylist'])){
+        $_SESSION['selectedPlaylist'] = 0;
+    }
 
 ?>

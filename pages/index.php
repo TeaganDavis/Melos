@@ -28,6 +28,8 @@
 
                 $_SESSION['playlists'] = [];
 
+                echo "<div id='recent-playlists>";
+
                 if ($UserPlaylists && $UserPlaylists->num_rows > 0){
                     while ($Row = $UserPlaylists->fetch_assoc()) {
                         $_SESSION['playlists'][] = [
@@ -38,16 +40,24 @@
                             "privacy" => $Row['privacy']
                         ];
 
-                        echo "<a class='playlist-links'>
-                            <div class='playlists' id='". $Row['playlist_id'] ."'>";
-                        echo "<h3>" . htmlspecialchars($Row['playlist_name']) . "</h3>";
-                        echo "<p>" . htmlspecialchars($Row['playlist_desc']) . "</p>";
-                        echo "<p><strong>Privacy:</strong> " . htmlspecialchars($Row['privacy']) . "</p>";
-                        echo "</div>
-                            </a>";
+                        echo "
+                        <form method='post' action='../pages/playlist-page.php'>
+                            <a>
+                            <div class='playlists'>
+                                <input type='hidden' name='form_id' value='playlist_form'/>
+                                <input type='hidden' name='playlist_id' value='". htmlspecialchars($Row['playlist_id']) ."'/>
+                                <label font-size='20'>" . htmlspecialchars($Row['playlist_name']) . "</label>
+                                <label>". htmlspecialchars($Row['playlist_desc']) ."</label>
+                                <label>". htmlspecialchars($Row['privacy']) ."</label>
+                                <button type='submit'>Open</button>
+                            </div>
+                            </a>
+                        </form>
+                        </div>";
+                        
                     }
                 } else {
-                    echo "<p>You don't have any playlists yet.</p>";
+                    echo "<p>You don't have any playlists yet.</p></div>";
                 }
             ?>
         </div>

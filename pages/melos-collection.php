@@ -8,55 +8,8 @@
     <?php
         $DBConnection = new mysqli("localhost", "root", "", "melos");
         $MelosCollection = $DBConnection->query("SELECT * FROM melos_collection");
-        
-        $AllPlaylists = $DBConnection->query("SELECT playlist_id, playlist_name, privacy FROM playlists ORDER BY playlist_name");
-        $playlists = [];
-        while ($playlist = $AllPlaylists->fetch_assoc()) {
-            $playlists[] = $playlist;
-        }
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'add_to_playlists') {
-            $songId = intval($_POST['song_id']);
-            $playlistIds = json_decode($_POST['playlist_ids'], true);
-            $userRating = 5; // Default rating, you can make this configurable
-            
-            $successCount = 0;
-            $errors = [];
-            
-            foreach ($playlistIds as $playlistId) {
-                $playlistId = intval($playlistId);
-                
-                // Check if song is already in playlist
-                $checkQuery = $DBConnection->prepare("SELECT * FROM playlist_songs WHERE playlist_id = ? AND song_id = ?");
-                $checkQuery->bind_param("ii", $playlistId, $songId);
-                $checkQuery->execute();
-                $result = $checkQuery->get_result();
-                
-                if ($result->num_rows == 0) {
-                    // Add song to playlist
-                    $insertQuery = $DBConnection->prepare("INSERT INTO playlist_songs (playlist_id, song_id, user_rating) VALUES (?, ?, ?)");
-                    $insertQuery->bind_param("iii", $playlistId, $songId, $userRating);
-                    
-                    if ($insertQuery->execute()) {
-                        $successCount++;
-                    } else {
-                        $errors[] = "Failed to add to playlist ID: $playlistId";
-                    }
-                } else {
-                    $errors[] = "Song already exists in playlist ID: $playlistId";
-                }
-            }
-            
-            // Return JSON response
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => $successCount > 0,
-                'successCount' => $successCount,
-                'errors' => $errors,
-                'message' => $successCount > 0 ? "Successfully added to $successCount playlist(s)" : "No playlists were updated"
-            ]);
-            exit;
-        }
+
     ?>
 </head>
 <body>
@@ -95,7 +48,7 @@
                                     <td>" . $Row['song_length'] . "</td>
                                     <td>" . $Row['release_date'] . "</td>
                                     <td>
-                                        <button onclick='openPlaylistModal(" . $Row['song_id'] . ", \"" . htmlspecialchars($Row['title']) . "\")'>
+                                        <button onclick=''>
                                             Add to Playlist
                                         </button>
                                     </td>
